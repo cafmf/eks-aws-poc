@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat-service-redis
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: chat-service-redis
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: chat-service-redis
+        tier: frontend
+    spec:
+      containers:
+      - name: chat-service-redis
+        image: cafmf/chat-service:latest
+        ports:
+        - containerPort: 3000
