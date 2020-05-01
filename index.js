@@ -5,9 +5,9 @@ var path = require('path');
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var redis = require('socket.io-redis');
-if(process.env.REDIS_SLAVE_SERVICE_HOST){
-  console.log('Redis found : ',process.env.REDIS_SLAVE_SERVICE_HOST);
-  io.adapter(redis({ host: process.env.REDIS_SLAVE_SERVICE_HOST, port: 6379 }));
+if(process.env.REDIS_MASTER_SERVICE_HOST){
+  console.log('Redis found : ',process.env.REDIS_MASTER_SERVICE_HOST);
+  io.adapter(redis({ host: process.env.REDIS_MASTER_SERVICE_HOST, port: 6379 }));
 }
 
 var Presence = require('./lib/presence');
@@ -16,7 +16,7 @@ var Presence = require('./lib/presence');
 io.set('heartbeat timeout', 8000);
 io.set('heartbeat interval', 4000);
 
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 8080;
 
 server.listen(port, function() {
   console.log('Server listening at port %d', port);

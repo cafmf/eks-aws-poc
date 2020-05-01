@@ -1,8 +1,26 @@
+docker build -t cafmf/chat-service:latest .
+
 eksctl create cluster \
   --region us-east-1 \
   --node-type t3.medium \
   --nodes 3 \
   --nodes-min 1 \
-  --nodes-max 4 \
-  --name eks-poc-cluster \
-  --kubeconfig=$HOME/kubeconfigs/demo-cluster-config.yaml
+  --nodes-max 10 \
+  --name eks-demo-cafmf \
+  --kubeconfig=$HOME/kubeconfigs/eks/demo-cluster-config.yaml
+
+  -- FARGATE ---
+  eksctl create cluster \
+  --region us-east-1 \
+  --name eks-fargate-demo-cafmf \
+  --kubeconfig=$HOME/kubeconfigs/fargate/demo-cluster-config.yaml
+  --fargate
+  -- END FARGATE --
+
+  eksctl create cluster -f demo-cluster-config.yaml \
+  --kubeconfig=$HOME/kubeconfigs/demo-cluster-config.yaml \
+  --managed
+
+  export KUBECONFIG=$HOME/kubeconfigs/demo-cluster-config.yaml
+
+  kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
